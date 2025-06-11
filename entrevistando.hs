@@ -1,6 +1,3 @@
-import Graphics.Win32 (Pos)
-import GHCi.Message (remoteCall, ResumeContext (resumeStatusMVar))
-import qualified Main as init
 data Postulante = UnPostulante {nombre :: String, edad :: Int, remuneracion :: Float, conocimientos :: [String]} | Estudiante {legajo :: String, conocimientos :: [String]}deriving Show 
  
 pepe = UnPostulante "Jose Perez" 35 15000.0 ["Haskell", "Prolog", "Wollok", "C"]
@@ -95,10 +92,8 @@ infinito = pepe: infinito
 
 
 capacitar :: Postulante -> String -> Postulante
-capacitar (UnPostulante nombre edad remuneracion conocimientos) conocimiento = UnPostulante nombre edad remuneracion (agregarConocimiento conocimiento. conocimientos $ postulante)
-capacitar (Estudiante legajo conocimientos) conocimiento = Estudiante legajo  (agregarConocimiento conocimiento. init.conocimientos) postulante
+capacitar (UnPostulante nombre edad remuneracion conocimientos) conocimiento = UnPostulante nombre edad remuneracion (agregarConocimiento conocimiento conocimientos)
+capacitar (Estudiante legajo conocimientos) conocimiento = Estudiante legajo  ((agregarConocimiento conocimiento. init) conocimientos)
 
 agregarConocimiento :: String -> [String] -> [String]
 agregarConocimiento conocimiento conocimientos = conocimiento: conocimientos
-
-
