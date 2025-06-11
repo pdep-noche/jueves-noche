@@ -1,5 +1,4 @@
-data Animal= Raton {nombre :: String, edad :: Double, peso :: Double,
- enfermedades :: [String]} deriving Show
+data Animal= Raton {nombre :: String, edad :: Double, peso :: Double, enfermedades :: [String]} deriving Show
 -- Ejemplo de raton
 cerebro = Raton "Cerebro" 9.0 0.2 ["brucelosis", "sarampión", "tuberculosis"]
 -- Estos son las enfermedades infecciosas
@@ -58,4 +57,43 @@ antiAge animal = medicamento (replicate 3 hierbaBuena ++ [alcachofa]) animal
 ghci> antiAge cerebro
 Raton {nombre = "Cerebro", edad = 1.3160740129524924, peso = 0.19, enfermedades = ["brucelosis","sarampi\243n","tuberculosis"]}
 
+-}
+
+reduceFatFast :: Int -> Animal -> Animal
+reduceFatFast potencia animal = medicamento ([hierbaVerde "obesidad"] ++ replicate potencia alcachofa) animal
+ 
+
+ {-
+ ghci> reduceFatFast 2 cerebro
+Raton {nombre = "Cerebro", edad = 9.0, peso = 0.1805, enfermedades = ["brucelosis","sarampi\243n","tuberculosis"]}
+-}
+
+hierbaMilagrosa :: Animal -> Animal
+hierbaMilagrosa unAnimal = medicamento (map hierbaVerde  enfermedadesInfecciosas)  unAnimal
+
+
+{-}
+ghci> hierbaMilagrosa cerebro
+Raton {nombre = "Cerebro", edad = 9.0, peso = 0.2, enfermedades = ["sarampi\243n"]}
+
+-}
+
+cantidadIdeal f  =  head. filter f $ [1..]
+
+estanMejoresQueNunca  :: [Animal] -> (Animal -> Animal) -> Bool
+estanMejoresQueNunca animales medicamento = all ((<1).peso.medicamento) animales
+
+orejudo = Raton "Orejudo" 4.0 8.1 ["sinusitis"]
+
+{-
+ghci> estanMejoresQueNunca [cerebro, orejudo] antiAge
+False
+-}
+
+nuevoExperimento :: [Animal] -> Int
+nuevoExperimento animales =cantidadIdeal (estanMejoresQueNunca animales.reduceFatFast)
+
+{-
+ghci> nuevoExperimento [cerebro, orejudo]
+27
 -}
